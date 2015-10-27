@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>starry sky</title>
+</head>
+<body style = "height: 100%">
+	<div id="div1" style = "height: 100%">
+		<canvas id="can"  style="height: 100%" ></canvas>
+	</div>
+	<script>
+		window.onload = function() {
+			var canvas = document.getElementById("can"),
+				ctx = canvas.getContext("2d"),
+				WINDOW_WIDTH = document.body.clientWidth,
+				WINDOW_HEIGHT = document.body.clientHeight,
+				a = [];
+			canvas.width = WINDOW_WIDTH;
+			canvas.height = WINDOW_HEIGHT;
+			var style = ctx.createLinearGradient(0,0,0,WINDOW_HEIGHT);
+			style.addColorStop(0.0, "#000");
+			style.addColorStop(1.0,"#035");
+			ctx.fillStyle = style;
+			ctx.fillRect(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
+			var R,
+				x,
+				y,
+				rota;
+			for (var i = 0; i < 66; i++) {
+				R = Math.random() * 5 + 5;
+				x = Math.random() *  canvas.width;
+				y = Math.random() * canvas.height * 0.35;
+				rota = Math.random() * 360;
+				if (i === 0){
+					a.push({
+						ox: x,
+						oy: y,
+						or: R
+					});
+				}
+			
+				if (i !== 0 && !isOverlap(a,x,y,R) && !isOverBoundary(x,y,R,WINDOW_WIDTH,WINDOW_HEIGHT)) {
+					ctx.save();
+					ctx.translate(x,y);
+					ctx.rotate(rota/180 * Math.PI);
+					ctx.scale(R,R);
+					ctx.fillStyle = "yellow";
+					drawStar(ctx);
+					ctx.fill();	
+					ctx.restore();
+				}
+			}
+			drawLand(ctx,WINDOW_WIDTH,WINDOW_HEIGHT);
+		}
+
+		/**
+			画一个单位圆
+		**/
+		function drawStar(ctx) {
+			ctx.beginPath();
+			for (var i =0; i < 5; i++) {
+				ctx.lineTo(Math.cos((18 + i * 72)/ 180 * Math.PI), -Math.sin((18 + i * 72) / 180 * Math.PI));
+				ctx.lineTo(Math.cos((54 + i * 72)/ 180 * Math.PI)*0.5, -Math.sin((54 + i * 72) / 180 * Math.PI)*0.5);
+			}
+			ctx.closePath();
+			ctx.stroke();
+	    }
+	    /**
+	    	判断星星是否重叠
+	    	return：true/false(重叠/不重叠)
+	    **/
+	    function isOverlap(a,x,y,R) {
+	    	for (var i = 0, len = a.length; i < len; i++) {
+	    		if(isIntersect(a[i].ox, a[i].oy, a[i].or, x, y, R)){
+	    			return true;
+	    		}
+	    	}
+	    	a.push({
+						ox: x,
+						oy: y,
+						or: R
+					});
+	    	return false;
+	    }
+	    /**
+	    	判断两个圆是否相交
+	    	return: true/false(相交/不相交)
+	    **/
+	    function isIntersect(x1,y1,r1,x2,y2,r2) {
+	    	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)) <= r1 + r2;
+	    }
+	    /**
+	    	判断星星是否越过边界
+	    	return：true/false(越界/不越界)
+	    **/
+	    function isOverBoundary(x,y,R,width,height) {
+	    	return x - R  <= 0 || x + R >= width ||  y - R <= 0 || y + R >= height;
+	    }
+
+	    function drawLand(ctx,w,h) {
+	    	ctx.save();
+	    	ctx.beginPath();
+	    	ctx.closePath();
+	    	ctx.moveTo(0,h*0.85);
+	    	ctx.bezierCurveTo(540,650,660,400,w,h*0.8);
+	    	ctx.lineTo(w,h);
+	    	ctx.lineTo(0,h);
+	    	var style = ctx.createLinearGradient(0,0,0,h);
+	    	style.addColorStop(0.0, "#7cfc00");
+	    	style.addColorStop(1.0, "7ccd7c");
+	    	ctx.fillStyle = style;
+	    	ctx.fill();
+	    	ctx.restore();
+	    }
+	    function drawMoon(ctx,R) {
+
+	    }
+	</script>
+</body>
+</html>
