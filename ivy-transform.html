@@ -1,12 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>starry sky</title>
+	<style type="text/css">
+	html,body,div,canvas{
+		height: 100%;
+	}
+	</style>
 </head>
-<body style = "height: 100%">
-	<div id="div1" style = "height: 100%">
-		<canvas id="can"  style="height: 100%" ></canvas>
+<body>
+	<div id="div1">
+		<canvas id="can"></canvas>
 	</div>
 	<script>
 		window.onload = function() {
@@ -107,7 +112,7 @@
 	    	ctx.lineTo(0,h);
 	    	var style = ctx.createLinearGradient(0,0,0,h);
 	    	style.addColorStop(0.0, "#7cfc00");
-	    	style.addColorStop(1.0, "7ccd7c");
+	    	style.addColorStop(1.0, "#7ccd7c");
 	    	ctx.fillStyle = style;
 	    	ctx.fill();
 	    	ctx.restore();
